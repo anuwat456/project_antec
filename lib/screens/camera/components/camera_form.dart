@@ -9,6 +9,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:project_antec/configuration/config.dart';
 import 'package:project_antec/constants.dart';
 
+import '../../menudashboard/mainmenudashboard.dart';
+
 class CameraForm extends StatefulWidget {
   @override
   _CameraFormState createState() => _CameraFormState();
@@ -63,6 +65,7 @@ class _CameraFormState extends State<CameraForm> {
           print(_scanMap);
         });
         _qrCodeResult = 'Scan QR-Code success.';
+        Navigator.popAndPushNamed(context, Homepage.routeName);
         return null;
       }
     }

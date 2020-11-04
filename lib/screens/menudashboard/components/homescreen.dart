@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:project_antec/configuration/config.dart';
 
-
 import 'package:project_antec/models/UserScanDataModel.dart';
 import 'package:project_antec/size_config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -43,12 +42,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
     setUserScan();
   }
-  
+
   void setUserScan() {
     Map params = Map();
     params['userId'] = _userId.toString();
 
-    http.post('${Config.API_BASE_URL}/scanqrcode/findbyuserqrcode', body: params).then((res) {
+    http
+        .post('${Config.API_BASE_URL}/scanqrcode/findbyuserqrcode',
+            body: params)
+        .then((res) {
       Map<String, dynamic> userScanMap = jsonDecode(res.body) as Map;
       UserScanDataModel userScanModel = UserScanDataModel.fromJson(userScanMap);
       setState(() {
@@ -68,60 +70,69 @@ class _HomeScreenState extends State<HomeScreen> {
         ..scale(_scaleFactor),
       duration: Duration(milliseconds: 250),
       decoration: BoxDecoration(
-          color: Colors.grey[300], borderRadius: BorderRadius.circular(_isDrawerOpen?40:0.0)),
-      child: Column(
-        children: [
-          SizedBox(height: SizeConfig.screenHeight * 0.04),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          color: Colors.grey[300],
+          borderRadius: BorderRadius.circular(_isDrawerOpen ? 40 : 0.0)),
+      child: SingleChildScrollView(
+        child: Container(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _isDrawerOpen
-                  ? IconButton(
-                      icon: Icon(Icons.arrow_back),
-                      onPressed: () {
-                        setState(() {
-                          _xOffset = 0;
-                          _yOffset = 0;
-                          _scaleFactor = 1;
-                          _isDrawerOpen = false;
-                        });
-                      },
-                    )
-                  : IconButton(
-                      icon: Icon(Icons.menu),
-                      onPressed: () {
-                        setState(() {
-                          _xOffset = 210;
-                          _yOffset = 90;
-                          _scaleFactor = 0.8;
-                          _isDrawerOpen = true;
-                        });
-                      },
-                    ),
-              Column(
+              SizedBox(height: SizeConfig.screenHeight * 0.04),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisSize: MainAxisSize.max,
                 children: [
+                  _isDrawerOpen
+                      ? IconButton(
+                          icon: Icon(Icons.arrow_back),
+                          onPressed: () {
+                            setState(() {
+                              _xOffset = 0;
+                              _yOffset = 0;
+                              _scaleFactor = 1;
+                              _isDrawerOpen = false;
+                            });
+                          },
+                        )
+                      : IconButton(
+                          icon: Icon(Icons.menu),
+                          onPressed: () {
+                            setState(() {
+                              _xOffset = 210;
+                              _yOffset = 90;
+                              _scaleFactor = 0.8;
+                              _isDrawerOpen = true;
+                            });
+                          },
+                        ),
                   Text(
-                    _userName == null ? 'Profile' : '$_userName',
+                    'Dashboard',
                     style: TextStyle(
                         color: kTextColor,
                         fontSize: getProportionateScreenHeight(28),
                         fontWeight: FontWeight.bold),
-                  )
+                  ),
+                  Column(),
+                  Column(),
                 ],
               ),
-              Column(),
-              Column(),
+              ListView.separated(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text("Macbook"),
+                      subtitle: Text("Apple"),
+                      trailing: Text("-2900"),
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    return Divider(height: 16);
+                  },
+                  itemCount: 10)
             ],
           ),
-          Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text("")
-              ],
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

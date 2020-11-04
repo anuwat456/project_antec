@@ -30,6 +30,10 @@ const String kPassNullError = "Please Enter your password";
 const String kShortPassError = "Password is too short";
 const String kMatchPassError = "Passwords don't match";
 
+const String kMatchUserError = "Username already exists";
+
+const String kLoginError = "Your credentials are incorrect.";
+
 final otpInputDecoration = InputDecoration(
   contentPadding:
   EdgeInsets.symmetric(vertical: getProportionateScreenWidth(15)),
